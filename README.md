@@ -5,12 +5,12 @@ Este servidor OTA IPA permite a los usuarios instalar aplicaciones iOS desde un 
 
 ## 🛠️ Instalación
 Clona este repositorio
-   ```
-   git clone https://github.com/tu-usuario/tu-proyecto.git
-   ```
+```
+git clone https://github.com/tu-usuario/tu-proyecto.git
+```
 
 ## 🚀 Uso
 Para iniciar la aplicación, ejecuta:
-   ```
-   cargo run
-   ```
+```
+cargo run
+```
