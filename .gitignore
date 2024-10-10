@@ -1,0 +1,11 @@
+#Resources
+/builds/*
+!/builds/.gitkeep
+
+#OpenSSL certs & keys
+*.pem
+*.pem
+
+#Runtime
+/target/
+Cargo.lock

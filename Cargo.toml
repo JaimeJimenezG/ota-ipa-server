@@ -1,0 +1,10 @@
+[package]
+name = "ipa_server"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+openssl = "0.10"
+native-tls = "0.2"
+qrcode = "0.12"
+html-escape = "0.2.13"
