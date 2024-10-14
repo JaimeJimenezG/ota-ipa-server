@@ -62,9 +62,7 @@ pub fn load_plist(build: &str, address: &str) -> String {
             <div class="content-container">
                 <h1>Contenido del archivo .plist para {}</h1>
                 <div class="button-container">
-                    <a href="itms-services://?action=download-manifest&amp;url=https://{address}{url}" class="button install-button">Instalar</a>
-                    
-                    <a href="https://{address}{url}" class="button install-button">Download .plist</a>
+                    <a href="itms-services://?action=download-manifest&amp;url={address}{url}" class="button install-button">install</a>
                 </div>
                 <div class="plist-content">
                     {}

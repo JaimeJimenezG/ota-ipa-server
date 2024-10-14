@@ -2,7 +2,6 @@ mod routes {
     pub mod build_list;
     pub mod home;
     pub mod info;
-    pub mod install_ipa;
     pub mod load_plist;
     pub mod qr_page;
 }
@@ -11,13 +10,17 @@ use native_tls::{Identity, TlsAcceptor};
 use routes::*;
 use std::fs::{self, File};
 use std::io::{Read, Write};
-use std::net::TcpListener;
+use std::net::{IpAddr, Ipv4Addr, SocketAddr, TcpListener};
 use std::path::Path;
 use std::thread;
 
-pub const ADDRESS: &str = "0.0.0.0:8443";
+pub const IP: IpAddr = IpAddr::V4(Ipv4Addr::new(0, 0, 0, 0));
+pub const PORT: u16 = 8443;
+pub const ADDRESS: &str = "https://680b-90-162-43-242.ngrok-free.app"; // Asegúrate de que esta sea la dirección correcta
 
 fn main() {
+    let addr = SocketAddr::new(IP, PORT);
+
     let mut cert_file = File::open("cert.pem").expect("No se pudo abrir cert.pem");
     let mut key_file = File::open("key.pem").expect("No se pudo abrir key.pem");
 
@@ -36,8 +39,8 @@ fn main() {
     let acceptor = TlsAcceptor::new(identity).expect("No se pudo crear el aceptador TLS");
     let acceptor = std::sync::Arc::new(acceptor);
 
-    let listener = TcpListener::bind(ADDRESS).expect("No se pudo bindear el puerto");
-    println!("Servidor escuchando en https://{}", ADDRESS);
+    let listener = TcpListener::bind(addr).expect("No se pudo vincular al puerto");
+    println!("Servidor escuchando en https://{}", addr);
 
     for stream in listener.incoming() {
         let acceptor = acceptor.clone();
@@ -95,14 +98,6 @@ fn handle_connection<T: Read + Write>(mut stream: T) -> std::io::Result<()> {
                     .unwrap_or("")
                     .trim_start_matches("/qr/");
                 ("HTTP/1.1 200 OK", qr_page::qr_page(build, ADDRESS))
-            }
-            _ if request_line.starts_with("GET /install/") => {
-                let build = request_line
-                    .split_whitespace()
-                    .nth(1)
-                    .unwrap_or("")
-                    .trim_start_matches("/install/");
-                ("HTTP/1.1 200 OK", install_ipa::install_ipa(build, ADDRESS))
             }
             _ if request_line.starts_with("GET /load_plist/") => {
                 let build = request_line
